@@ -1,9 +1,11 @@
 $userfolder = get-childitem c:\users
 
-foreach ($userappdata in $userfolder)
-    {
-        if (Test-Path -path "$userappdata\appdata\roaming\Logi-Trace") {
-            copy-item -path "\\wild-blueberries.com\SYSVOL\wild-blueberries.com\scripts\Azure-ini\Connexion.ini" -Destination "$userappdata\appdata\Roaming\Logi-Trace" -Force
+foreach ($userappdata in $userfolder) {
+        write-output "working on $userappdata"
+        if (Test-Path -path "c:\users\$userappdata\appdata\roaming\Logi-Trace") {
+            copy-item -path ".\Connexion.ini" -Destination "c:\users\$userappdata\appdata\Roaming\Logi-Trace\" -Force
+            write-output "the $userappdata folder has been updated"
         }
     }
-##write-output $userfolder
+
+write-output "all folder in $userfolder has been updated"
