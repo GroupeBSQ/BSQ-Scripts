@@ -1,4 +1,5 @@
 install-module -name psini -SkipPublisherCheck -Force -AcceptLicense
+import-module psini
 
 ###  here the script start
 
