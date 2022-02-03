@@ -120,7 +120,7 @@ Function Set-IniContent {
     Begin
     {
         Write-Debug "PsBoundParameters:"
-        $PSBoundParameters.GetEnumerator() | ForEach { Write-Debug $_ }
+        $PSBoundParameters.GetEnumerator() | ForEach-object { Write-Debug $_ }
         if ($PSBoundParameters['Debug']) { $DebugPreference = 'Continue' }
         Write-Debug "DebugPreference: $DebugPreference"
         Write-Verbose "$($MyInvocation.MyCommand.Name):: Function started"
@@ -440,19 +440,10 @@ Function Out-IniFile {
 
 ###  here the script start
 
-$sfolder = "c:\Logiciels_BSQ\Console_BSQ"
-$notsfolder = "c:\Logiciel_BSQ\Console_BSQ"
+$console_install = Get-ChildItem HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | foreach-object { Get-ItemProperty $_.PsPath } | Select-object DisplayName,InstallLocation | Sort-Object Displayname -Descending | where-object displayname -match console_bsq
 
-$installedfolder  
+$installedfolder = $console_install.InstallLocation
 
-if (Test-Path -path $sfolder) {
-       $installedfolder = $sfolder
-        }
- elseif (Test-Path -path $notsfolder) {
-       $installedfolder = $notsfolder
-        }
- else {
-       write-output "the folder was not found on this computer"
-        }
-
-set-inicontent -filepath "$installedfolder\Connexion.ini" -Sections "Serveur" -NameValuePairs "IP=172.30.2.6,Service=172.30.2.6" | out-inifile "$insatlledfolder\Connexion.ini"
+foreach ($folder in $installedfolder) {
+    set-inicontent -filepath "$folder\Connexion.ini" -Sections "Serveur" -NameValuePairs "IP=172.30.2.6,Service=172.30.2.6" | out-inifile "$folder\Connexion.ini"
+}
