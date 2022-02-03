@@ -617,5 +617,5 @@ $console_install = Get-ChildItem HKLM:\Software\Wow6432Node\Microsoft\Windows\Cu
 $installedfolder = $console_install.InstallLocation
 
 foreach ($folder in $installedfolder) {
-    set-inicontent -filepath "$folder\Connexion.ini" -Sections "Serveur" -NameValuePairs "IP=172.30.2.6,Service=172.30.2.6" | out-inifile "$folder\Connexion.ini"
+    get-inicontent -filepath "$folder\Connexion.ini" | set-inicontent -Sections "Serveur" -NameValuePairs "IP=172.30.2.6,Service=172.30.2.6" | out-inifile "$folder\Connexion.ini"
 }
