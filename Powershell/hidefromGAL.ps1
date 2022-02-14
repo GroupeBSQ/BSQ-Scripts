@@ -39,6 +39,6 @@ $change = ConvertTo-Boolean -Variable $change
 if ($change) {
     set-aduser -Identity $user_name -add @{msExchHideFromAddressLists = $true}
 }
-    ## "SearchBase"="ou=bleuet,dc=wild-blueberries,dc=com"
+    ## "SearchBase"="ou=bleuet,dc=contoso,dc=com"
     ##"SearchScope" = "Subtree"
     ##"filter" = {enabled -eq $true}
