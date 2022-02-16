@@ -1,0 +1,1 @@
+Get-ADObject -Filter 'isDeleted -eq $True -and objectclass -eq "contact"' -IncludeDeletedObjects | Remove-ADObject
