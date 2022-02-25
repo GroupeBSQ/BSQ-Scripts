@@ -1,8 +1,9 @@
 $userfolder = get-childitem c:\users
-$usine = 
+$usine = read-host "which plant you want to update [SB;SF;DB;NP]"
 
 
-if ($env:usine == SB){
+
+if ($usine -eq "SB"){
     foreach ($userappdata in $userfolder) {
         write-output "working on $userappdata"
         if (Test-Path -path "c:\users\$userappdata\appdata\roaming\Logi-Trace") {
@@ -11,7 +12,7 @@ if ($env:usine == SB){
             }
         }
     }
-elseif ($env:usine == SF){
+elseif ($usine -eq "SF"){
     foreach ($userappdata in $userfolder) {
         write-output "working on $userappdata"
         if (Test-Path -path "c:\users\$userappdata\appdata\roaming\Logi-Trace") {
@@ -20,7 +21,7 @@ elseif ($env:usine == SF){
         }
     }
 }
-elseif ($env:usine == DB){
+elseif ($usine -eq "DB"){
     foreach ($userappdata in $userfolder) {
         write-output "working on $userappdata"
         if (Test-Path -path "c:\users\$userappdata\appdata\roaming\Logi-Trace") {
@@ -29,7 +30,7 @@ elseif ($env:usine == DB){
         }
     }
 }
-elseif ($env:usine == NP){
+elseif ($usine -eq "NP"){
     foreach ($userappdata in $userfolder) {
         write-output "working on $userappdata"
         if (Test-Path -path "c:\users\$userappdata\appdata\roaming\Logi-Trace") {
