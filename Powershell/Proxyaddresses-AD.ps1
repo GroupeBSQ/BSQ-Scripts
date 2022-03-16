@@ -1,4 +1,4 @@
-﻿$Domains = "bsq.link","qwb.email","bsq-qwb.com","senco.cloud","senco.farm","fruitsbleues.com","fruitsbleues.ca","bleuet.cloud","congelation.ca","usinecongelation.ca","usinecongelation.com"
+﻿$Domains = "bsq.link","qwb.email","bsq-qwb.com","senco.cloud","senco.farm","fruitsbleues.com","fruitsbleues.ca","bleuet.cloud","congelation.ca","usinecongelation.ca","usinecongelation.com","aadds.wild-blueberries.com"
 #$Domains += read-host("is there new domain you want to add to this list:$Domains")
 $username = read-host("which user are we adding the proxies address? * for all")
 if ($username -eq "*"){
