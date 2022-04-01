@@ -30,3 +30,7 @@ REG ADD "HKLM\SOFTWARE\Policies\Microsoft\OneDrive" /v "FilesOnDemandEnabled" /t
 ### Not shure it's really needed as the others before are functionning
 ###REG ADD "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\RailRunonce" /v "OneDrive" /t REG_SZ /d "C:\Program Files (x86)\Microsoft OneDrive\OneDrive.exe /background"
 ###REG ADD "HKCU\Software\Microsoft\OneDrive" /v "EnableADAL" /t REG_DWORD /d 2 /f
+
+### END with the sysprep command
+
+C:\Windows\System32\Sysprep\sysprep.exe /oobe /generalize /shutdown

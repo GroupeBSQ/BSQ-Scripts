@@ -7,7 +7,7 @@
 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\AppxDeploymentClient\" -TaskName "Pre-staged app cleanup"
 
 ##Set Language Pack Content Stores##
-[string]$LIPContent = "E:"
+[string]$LIPContent = "z:"
 
 ##French Canada##
 Add-AppProvisionedPackage -Online -PackagePath $LIPContent\fr-ca\LanguageExperiencePack.fr-ca.Neutral.appx -LicensePath $LIPContent\fr-ca\License.xml
@@ -28,3 +28,33 @@ Add-WindowsPackage -Online -PackagePath $LIPContent\Microsoft-Windows-WordPad-Fo
 $LanguageList = Get-WinUserLanguageList
 $LanguageList.Add("fr-ca")
 Set-WinUserLanguageList $LanguageList -force
+
+
+
+#########################################
+## Update Inbox Apps for Multi Language##
+#########################################
+##Set Inbox App Package Content Stores##
+[string] $AppsContent = "F:\"
+
+##Update installed Inbox Store Apps##
+foreach ($App in (Get-AppxProvisionedPackage -Online)) {
+	$AppPath = $AppsContent + $App.DisplayName + '_' + $App.PublisherId
+	Write-Host "Handling $AppPath"
+	$licFile = Get-Item $AppPath*.xml
+	if ($licFile.Count) {
+		$lic = $true
+		$licFilePath = $licFile.FullName
+	} else {
+		$lic = $false
+	}
+	$appxFile = Get-Item $AppPath*.appx*
+	if ($appxFile.Count) {
+		$appxFilePath = $appxFile.FullName
+		if ($lic) {
+			Add-AppxProvisionedPackage -Online -PackagePath $appxFilePath -LicensePath $licFilePath 
+		} else {
+			Add-AppxProvisionedPackage -Online -PackagePath $appxFilePath -skiplicense
+		}
+	}
+}
