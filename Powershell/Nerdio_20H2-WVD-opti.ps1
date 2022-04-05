@@ -29,7 +29,6 @@ Microsoft.People,"https://www.microsoft.com/en-us/p/microsoft-people/9nblggh10pg
 Microsoft.Print3D,"https://www.microsoft.com/en-us/p/print-3d/9pbpch085s3s"
 Microsoft.SkypeApp,"https://www.microsoft.com/en-us/p/skype/9wzdncrfj364"
 Microsoft.Wallet,"https://www.microsoft.com/en-us/payments"
-Microsoft.Windows.Photos,"https://www.microsoft.com/en-us/p/microsoft-photos/9wzdncrfjbh4"
 Microsoft.Microsoft3DViewer,"https://www.microsoft.com/en-us/p/3d-viewer/9nblggh42ths"
 Microsoft.WindowsAlarms,"https://www.microsoft.com/en-us/p/windows-alarms-clock/9wzdncrfj3pr"
 Microsoft.WindowsCalculator,"https://www.microsoft.com/en-us/p/windows-calculator/9wzdncrfhvn5"
@@ -231,20 +230,6 @@ $DefaultUserSettings = @"
     {
         "HivePath": "HKLM:\\VDOT_TEMP\\Control Panel\\International\\User Profile",
         "KeyName": "HttpAcceptLanguageOptOut",
-        "PropertyType": "DWORD",
-        "PropertyValue": 1,
-        "SetProperty": "True"
-    },
-    {
-        "HivePath": "HKLM:\\VDOT_TEMP\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\Microsoft.Windows.Photos_8wekyb3d8bbwe",
-        "KeyName": "Disabled",
-        "PropertyType": "DWORD",
-        "PropertyValue": 1,
-        "SetProperty": "True"
-    },
-    {
-        "HivePath": "HKLM:\\VDOT_TEMP\\Software\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications\\Microsoft.Windows.Photos_8wekyb3d8bbwe",
-        "KeyName": "DisabledByUser",
         "PropertyType": "DWORD",
         "PropertyValue": 1,
         "SetProperty": "True"
