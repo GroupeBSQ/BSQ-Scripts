@@ -34,3 +34,8 @@ REG ADD "HKLM\SOFTWARE\Policies\Microsoft\OneDrive" /v "FilesOnDemandEnabled" /t
 ### END with the sysprep command
 
 C:\Windows\System32\Sysprep\sysprep.exe /oobe /generalize /shutdown
+
+icacls W: /grant GR_Usines:(M)
+icacls W: /grant "Creator Owner":(OI)(CI)(IO)(M)
+icacls W: /remove "Authenticated Users"
+icacls W: /remove "Builtin\Users"
