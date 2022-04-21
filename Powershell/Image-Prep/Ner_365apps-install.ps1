@@ -47,18 +47,35 @@ Start-Process -filepath "$env:windir\Temp\odt_sadata.exe" -ArgumentList "/extrac
 # create a base config XML for ODT to use, this one has auto-update disabled
 $ODTConfig = @"
 <Configuration>
-  <Add OfficeClientEdition="64" Channel="MonthlyEnterprise">
+  <Add OfficeClientEdition="32" Channel="current">
     <Product ID="O365ProPlusRetail">
-      <Language ID="en-US" />
-      <Language ID="MatchOS" />
+      <Language ID="fr-ca" />
+      <ExcludeApp ID="Access" />
       <ExcludeApp ID="Groove" />
       <ExcludeApp ID="Lync" />
       <ExcludeApp ID="OneDrive" />
+      <ExcludeApp ID="OneNote" />
+      <ExcludeApp ID="Publisher" />
       <ExcludeApp ID="Teams" />
+      <ExcludeApp ID="Bing" />
+      <ExcludeApp ID="Bing" />
+    </Product>
+  </Add>
+  <Add OfficeClientEdition="64" Channel="Current">
+    <Product ID="VisioProRetail">
+      <ExcludeApp ID="Access" />
+      <ExcludeApp ID="Groove" />
+      <ExcludeApp ID="Lync" />
+      <ExcludeApp ID="OneDrive" />
+      <ExcludeApp ID="OneNote" />
+      <ExcludeApp ID="Publisher" />
+      <ExcludeApp ID="Teams" />
+      <ExcludeApp ID="Bing" />
+      <ExcludeApp ID="Bing" />
     </Product>
   </Add>
   <RemoveMSI/>
-  <Updates Enabled="FALSE"/>
+  <Updates Enabled="TRUE"/>
   <Display Level="None" AcceptEULA="TRUE" />
   <Logging Level="Standard" Path="%temp%\WVDOfficeInstall" />
   <Property Name="FORCEAPPSHUTDOWN" Value="TRUE"/>
