@@ -60,9 +60,9 @@ $ODTConfig = @"
       <ExcludeApp ID="Bing" />
       <ExcludeApp ID="Bing" />
     </Product>
-  </Add>
-  <Add OfficeClientEdition="64" Channel="Current">
+
     <Product ID="VisioProRetail">
+      <Language ID="fr-fr" />
       <ExcludeApp ID="Access" />
       <ExcludeApp ID="Groove" />
       <ExcludeApp ID="Lync" />

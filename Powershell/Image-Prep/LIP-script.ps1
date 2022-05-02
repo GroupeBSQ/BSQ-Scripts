@@ -74,7 +74,7 @@ Disable-ScheduledTask -TaskPath "\Microsoft\Windows\LanguageComponentsInstaller"
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\International" /v "BlockCleanupOfUnusedPreinstalledLangPacks" /t REG_DWORD /d 1 /f
 
 ##Set Language Pack Content Stores##
-$LIPContent = "F:\LanguagesAndOptionalFeatures"
+$LIPContent = "w:"
 
 ##Set Path of CSV File##
 $CSVFile = "Windows-10-1809-FOD-to-LP-Mapping-Table.csv"
@@ -97,8 +97,8 @@ $langGroup = (($FODList | Where-Object {$_.'Target Lang' -eq $targetLanguage}) |
 $additionalFODList = @(
     "$LIPContent\Microsoft-Windows-NetFx3-OnDemand-Package~31bf3856ad364e35~amd64~~.cab", 
     "$LIPContent\Microsoft-Windows-MSPaint-FoD-Package~31bf3856ad364e35~amd64~$sourceLanguage~.cab",
-    "$LIPContent\Microsoft-Windows-SnippingTool-FoD-Package~31bf3856ad364e35~amd64~$sourceLanguage~.cab",
-    "$LIPContent\Microsoft-Windows-Lip-Language_x64_$sourceLanguage.cab" ##only if applicable##
+    "$LIPContent\Microsoft-Windows-SnippingTool-FoD-Package~31bf3856ad364e35~amd64~$sourceLanguage~.cab"
+    #"$LIPContent\Microsoft-Windows-Lip-Language_x64_$sourceLanguage.cab" ##only if applicable##
 )
 
 $additionalCapabilityList = @(
@@ -111,7 +111,7 @@ $additionalCapabilityList = @(
 
  ##Install all FODs or fonts from the CSV file###
  Dism /Online /Add-Package /PackagePath:$LIPContent\Microsoft-Windows-Client-Language-Pack_x64_$sourceLanguage.cab
- Dism /Online /Add-Package /PackagePath:$LIPContent\Microsoft-Windows-Lip-Language-Pack_x64_$sourceLanguage.cab
+ #Dism /Online /Add-Package /PackagePath:$LIPContent\Microsoft-Windows-Lip-Language-Pack_x64_$sourceLanguage.cab
  foreach($capability in $additionalCapabilityList){
     Dism /Online /Add-Capability /CapabilityName:$capability /Source:$LIPContent
  }
