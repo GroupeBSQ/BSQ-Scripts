@@ -30,14 +30,31 @@ $params = @{
 get-aduser @params
 
 # question  pour savoir si nous effectuons le changmenet du paramtre "msExchHideFromAddressLists"
-$change = read-host -Prompt "est-ce que nous cachons l'adresse de la liste global? (Y/N)"
+
+$add =  read-host -Prompt "est-ce que nous cachons l'adresse de la liste global? (Y/N)"
+
+$add = ConvertTo-Boolean -Variable $add
+
+if (-not $add) {
+$remove =  read-host -prompt "est-ce que nous voulons décaché cette utilisateur de la liste global exchange? (Y/N)"
+$remove= ConvertTo-Boolean -Variable $remove
+}
+
+
+
+
+
 
 #converti l'input en boolean
-$change = ConvertTo-Boolean -Variable $change
+#$change = ConvertTo-Boolean -Variable $change
 
 #si nous avons dit oui fait le changmeent du paramtre dans le profil utilisateur
-if ($change) {
+if ($add) {
     set-aduser -Identity $user_name -add @{msExchHideFromAddressLists = $true}
+    get-aduser @params
+} elseif ($remove) {
+    set-aduser -Identity $user_name -clear "msExchHideFromAddressLists"
+    get-aduser @params
 }
     ## "SearchBase"="ou=bleuet,dc=contoso,dc=com"
     ##"SearchScope" = "Subtree"
