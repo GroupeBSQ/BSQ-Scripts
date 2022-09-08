@@ -74,11 +74,11 @@ Disable-ScheduledTask -TaskPath "\Microsoft\Windows\LanguageComponentsInstaller"
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Control Panel\International" /v "BlockCleanupOfUnusedPreinstalledLangPacks" /t REG_DWORD /d 1 /f
 
 ##Set Language Pack Content Stores##
-$LIPContent = "w:"
+$LIPContent = "z:"
 
 ##Set Path of CSV File##
 $CSVFile = "Windows-10-1809-FOD-to-LP-Mapping-Table.csv"
-$filePath = (Get-Location).Path + "/$CSVFile"
+$filePath = (Get-Location).Path + "\$CSVFile"
 
 ##Import Necesarry CSV File##
 $FODList = Import-Csv -Path $filePath -Delimiter ";"
