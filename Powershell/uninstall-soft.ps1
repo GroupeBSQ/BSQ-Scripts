@@ -9,3 +9,5 @@ $MyApp.uninstall()
 ###### the second method shoudl show more apps  and then uninstall the app 
 
 Get-Package -Provider Programs -IncludeWindowsInstaller -Name "Datto RMM" | Uninstall-Package
+
+Invoke-Command -ComputerName NP-Acceuil -ScriptBlock {Get-Package}
