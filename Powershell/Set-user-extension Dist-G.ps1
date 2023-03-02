@@ -1,27 +1,27 @@
-Function ConvertTo-Boolean {
-    param($Variable)
-    If ($Variable -eq "Y" -or $Variable -eq "o"-or $Variable -eq "yes"-or $Variable -eq "oui") {
-        $True
-    }
-    If ($Variable -eq "N" -or $Variable -eq "no" -or $Variable -eq "non") {
-        $False
-    }
-}
+# Function ConvertTo-Boolean {
+#     param($Variable)
+#     If ($Variable -eq "Y" -or $Variable -eq "o"-or $Variable -eq "yes"-or $Variable -eq "oui") {
+#         $True
+#     }
+#     If ($Variable -eq "N" -or $Variable -eq "no" -or $Variable -eq "non") {
+#         $False
+#     }
+# }
 $username = read-host("Quel utilisateurs devons nous faire la modification? séparer par virgule pour plusieurs")
 $username = $username.split(',')
 
 
-$postecont = read-host("Est-ce que le titre du poste est Contrmaitre? (O/N)")
-$postedir = read-host("Est-ce que le titre du poste est Directeur? (O/N)")
-$postece = read-host("est-ce que le titre du poste est Chef d'equipe? (O/N)")
-$poste = $NULL
+$poste = read-host("Est-ce que le titre du poste est Contrmaitre(C) Directeur(D) ou Chef d'equipe(CE)")
+#$postedir = read-host("Est-ce que le titre du poste est Directeur? (O/N)")
+#$postece = read-host("est-ce que le titre du poste est Chef d'equipe? (O/N)")
+#$poste = $NULL
 
-$postecontbool = ConvertTo-Boolean -Variable $postecont
-$postedirbool = ConvertTo-Boolean -Variable $postedir
-$postecebool = ConvertTo-Boolean -Variable $postece
-if ($postecontbool) {$poste = "Contremaitres"}
-    elseif ($postecebool) {$poste = "Chef-equipe"}
-        elseif ($postedirbool) {$poste = "Directeur"}
+# $postecontbool = ConvertTo-Boolean -Variable $postecont
+# $postedirbool = ConvertTo-Boolean -Variable $postedir
+# $postecebool = ConvertTo-Boolean -Variable $postece
+if ($poste -eq "C" -or $poste -eq "c") {$poste = "Contremaitres"}
+    elseif ($poste -eq "CE" -or $poste -eq "ce" -or $poste -eq "Ce" -or $poste -eq "cE") {$poste = "Chef-equipe"}
+        elseif ($poste -eq "D" -or $poste -eq "d") {$poste = "Directeur"}
     
 
 
