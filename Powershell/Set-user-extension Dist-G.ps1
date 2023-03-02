@@ -11,12 +11,17 @@ $username = read-host("Quel utilisateurs devons nous faire la modification? sép
 $username = $username.split(',')
 
 
-$poste = read-host("Est-ce que le titre du poste est contrmaitre? (O/N)")
+$postecont = read-host("Est-ce que le titre du poste est Contrmaitre? (O/N)")
+$postedir = read-host("Est-ce que le titre du poste est Directeur? (O/N)")
+$postece = read-host("est-ce que le titre du poste est Chef d'equipe? (O/N)")
+$poste = $NULL
 
-$postebool = ConvertTo-Boolean -Variable $poste
-if ($postebool) {$poste = "Contremaitres"}
-    #else {$poste = "Production"}
-
+$postecontbool = ConvertTo-Boolean -Variable $postecont
+$postedirbool = ConvertTo-Boolean -Variable $postedir
+$postecebool = ConvertTo-Boolean -Variable $postece
+if ($postecontbool) {$poste = "Contremaitres"}
+    elseif ($postecebool) {$poste = "Chef-equipe"}
+        elseif ($postedirbool) {$poste = "Directeur"}
     
 
 
