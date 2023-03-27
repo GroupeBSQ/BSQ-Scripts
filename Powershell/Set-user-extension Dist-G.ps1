@@ -21,7 +21,7 @@ $poste = read-host("Est-ce que le titre du poste est Contrmaitre(C) Directeur(D)
 # $postecebool = ConvertTo-Boolean -Variable $postece
 if ($poste -eq "C" -or $poste -eq "c") {$poste = "Contremaitres"}
     elseif ($poste -eq "CE" -or $poste -eq "ce" -or $poste -eq "Ce" -or $poste -eq "cE") {$poste = "Chef-equipe"}
-        elseif ($poste -eq "D" -or $poste -eq "d") {$poste = "Directeur"}
+        elseif ($poste -eq "D" -or $poste -eq "d") {$poste = "Directeurs"}
     
 
 
