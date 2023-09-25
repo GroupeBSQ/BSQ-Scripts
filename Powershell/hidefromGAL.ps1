@@ -9,7 +9,10 @@ Function ConvertTo-Boolean {
     }
 }
 # question pour savoir quel utilisateur nous devons verifier
-$user_name= read-host -Prompt "entré le nom d'usager"
+
+while($user_name= read-host -Prompt "entré le nom d'usager") {
+
+    if ($user_name -eq "" -or $user_name -eq $null){break}
 
 #parametre pour sortir un peut d'information du get-aduser
 $params = @{
@@ -59,3 +62,4 @@ if ($add) {
     ## "SearchBase"="ou=bleuet,dc=contoso,dc=com"
     ##"SearchScope" = "Subtree"
     ##"filter" = {enabled -eq $true}
+}
