@@ -17,12 +17,16 @@ $serverbool = ConvertTo-Boolean -Variable $server
 if ($serverbool) {$server = "Acomba"}
     else {$server = "Production"}
 
-    
-$session = read-host("Est-ce que l'utilisateur doit obtenir un bureau a distance (O/N)")
 
-$sessionbool = ConvertTo-Boolean -Variable $session
-if ($sessionbool) {$session = "Desktop"}
-    else {$session = "App"}
+
+if ($server -ne "Acomba") 
+    { $session = read-host("Est-ce que l'utilisateur doit obtenir un bureau a distance (O/N)")
+
+        $sessionbool = ConvertTo-Boolean -Variable $session
+        if ($sessionbool) {$session = "Desktop"}
+        else {$session = "App"}
+    }
+    else { $session = "Desktop"}
 
 $username | ForEach-Object {Get-AdUser -Identity $_ | Set-ADuser -Replace @{extensionAttribute1 = $session; extensionAttribute2 = $server }}
     
