@@ -1,5 +1,6 @@
-﻿$Domains = "bleuets.quebec","bsq.link","qwb.email","bsq-qwb.com","bleuet.cloud","congelation.ca","usinecongelation.ca","usinecongelation.com","aadds.wild-blueberries.com"
+﻿$Domains = "bleuet.cloud","bleuets.quebec","bleuetsauvage.quebec","bleuetsauvages.com","bleuetsauvages.quebec","bleuetssauvages.quebec","bsq-qwb.com","bsq.link","congelation.ca","qwb.email","usinecongelation.ca","usinecongelation.com","aadds.wild-blueberries.com"
 #$Domains += read-host("is there new domain you want to add to this list:$Domains")
+
 $username = read-host("which user are we adding the proxies address? * for all")
 if ($username -eq "*"){
     Get-ADuser -Filter * -properties mail | foreach-object {
