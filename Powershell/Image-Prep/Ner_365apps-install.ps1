@@ -47,7 +47,7 @@ Start-Process -filepath "$env:windir\Temp\odt_sadata.exe" -ArgumentList "/extrac
 # create a base config XML for ODT to use, this one has auto-update disabled
 $ODTConfig = @"
 <Configuration>
-  <Add OfficeClientEdition="32" Channel="current">
+  <Add OfficeClientEdition="64" Channel="current">
     <Product ID="O365ProPlusRetail">
       <Language ID="fr-ca" />
       <ExcludeApp ID="Access" />
@@ -56,7 +56,6 @@ $ODTConfig = @"
       <ExcludeApp ID="OneDrive" />
       <ExcludeApp ID="OneNote" />
       <ExcludeApp ID="Publisher" />
-      <ExcludeApp ID="Teams" />
       <ExcludeApp ID="Bing" />
       <ExcludeApp ID="Bing" />
     </Product>
