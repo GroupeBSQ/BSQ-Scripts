@@ -12,6 +12,7 @@ Function ConvertTo-Boolean {
 
 while($user_name= read-host -Prompt "entré le nom d'usager") {
 
+    
     if ($user_name -eq "" -or $user_name -eq $null){break}
 
 #parametre pour sortir un peut d'information du get-aduser
