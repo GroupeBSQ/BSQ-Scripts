@@ -1,4 +1,4 @@
-# Detect-FrCAKeyboard.ps1 (User Context) - Console output only
+# Detect-FrCAKeyboard.ps1 (User Context) - Console output only, PS 5.1 compatible
 
 [CmdletBinding()]
 param()
@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Stop'
 # ---- Config ----
 $LanguageTag = 'fr-CA'
 $LangHex     = '0C0C'
-$Kb_FrCa     = '00001009'   # Canadian French
+$Kb_FrCa     = '00001009'   # Canadian French (non-legacy)
 $Kb_CMS      = '00011009'   # Canadian Multilingual Standard
 $ExpectedTips = @("$($LangHex):$Kb_FrCa", "$($LangHex):$Kb_CMS")
 $PreloadKey  = 'HKCU:\Keyboard Layout\Preload'
@@ -27,7 +27,7 @@ function Compare-Exact {
     param([object[]]$A,[object[]]$B)
     if ($null -eq $A -and $null -eq $B) { return $true }
     if ($null -eq $A -or  $null -eq $B) { return $false }
-    $arrA=@($A); $arrB=@($B)
+    $arrA=@($A); $arrB=@($B)       # force arrays
     if ($arrA.Count -ne $arrB.Count) { return $false }
     for ($i=0;$i -lt $arrA.Count;$i++){
         if ( ([string]$arrA[$i]).ToUpper() -ne ([string]$arrB[$i]).ToUpper() ) { return $false }
@@ -43,24 +43,27 @@ try {
     Write-Host "---------------------------"
 
     # 1) Language list
-    $list = Get-WinUserLanguageList
-    $langs = $list | ForEach-Object { $_.LanguageTag }
+    $list  = Get-WinUserLanguageList
+    $langs = @($list | ForEach-Object { $_.LanguageTag })  # force array
     Write-Host "Detected Languages: $($langs -join ', ')"
 
-    if (-not ($langs.Count -eq 1 -and $langs[0].ToLower() -eq $LanguageTag.ToLower())) {
-        Write-Host "❌ Non-compliant: Language mismatch"
+    # Use a safe first element as string
+    $firstLang = if ($langs.Count -ge 1) { [string]$langs[0] } else { '' }
+
+    if (-not ($langs.Count -eq 1 -and $firstLang.ToLower() -eq $LanguageTag.ToLower())) {
+        Write-Host "❌ Non-compliant: Language mismatch (expected '$LanguageTag', got '$($langs -join ', ')')"
         exit 1
     }
 
     # 2) TIPs
     $tips = @()
     if ($list.Count -gt 0 -and $null -ne $list[0].InputMethodTips) {
-        foreach ($t in $list[0].InputMethodTips) { $tips += ([string]$t) }
+        $tips = @($list[0].InputMethodTips | ForEach-Object { [string]$_ })  # force array of strings
     }
     Write-Host "Detected TIPs: $($tips -join ', ')"
 
     if (-not (Compare-Exact -A $tips -B $ExpectedTips)) {
-        Write-Host "❌ Non-compliant: TIPs mismatch"
+        Write-Host "❌ Non-compliant: TIPs mismatch (expected '$($ExpectedTips -join ', ')')"
         exit 1
     }
 
@@ -75,7 +78,7 @@ try {
           ($pre['2'].ToUpper() -eq $Kb_CMS.ToUpper())
 
     if (-not $ok) {
-        Write-Host "❌ Non-compliant: Preload mismatch"
+        Write-Host "❌ Non-compliant: Preload mismatch (must be 1=$Kb_FrCa; 2=$Kb_CMS, only those two)"
         exit 1
     }
 
@@ -86,3 +89,4 @@ catch {
     Write-Host "❌ Error: $($_.Exception.Message)"
     exit 1
 }
+``
