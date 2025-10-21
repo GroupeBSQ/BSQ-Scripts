@@ -33,8 +33,8 @@ $LangHex              = '0C0C'        # Hex LCID for fr-CA
 $Kb_FrCa              = '00001009'    # Français (Canada) keyboard
 $Kb_CanMultilingual   = '00011009'    # Canadian Multilingual Standard keyboard
 $DesiredTipsOrdered   = @(
-    "${LangHex}:$Kb_FrCa",
-    "${LangHex}:$Kb_CanMultilingual"
+    "${LangHex}:$Kb_CanMultilingual",
+    "${LangHex}:$Kb_FrCa"
 )
 
 # Registry paths

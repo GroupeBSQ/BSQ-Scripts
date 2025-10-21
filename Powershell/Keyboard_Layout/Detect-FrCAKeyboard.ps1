@@ -10,7 +10,7 @@ $LanguageTag = 'fr-CA'
 $LangHex     = '0C0C'
 $Kb_FrCa     = '00001009'   # Canadian French (non-legacy)
 $Kb_CMS      = '00011009'   # Canadian Multilingual Standard
-$ExpectedTips = @("$($LangHex):$Kb_FrCa", "$($LangHex):$Kb_CMS")
+$ExpectedTips = @("$($LangHex):$Kb_CMS", "$($LangHex):$Kb_FrCa")
 $PreloadKey  = 'HKCU:\Keyboard Layout\Preload'
 
 function Get-NumericRegValues {
