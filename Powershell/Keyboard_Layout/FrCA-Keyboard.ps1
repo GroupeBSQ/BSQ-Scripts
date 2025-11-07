@@ -95,7 +95,7 @@ function Test-FrCaKeyboardCompliance {
         PreloadValues           = @{}
         ExpectedLanguageTag     = $LanguageTag
         ExpectedTipsOrdered     = $DesiredTipsOrdered
-        ExpectedPreloadOrder    = @{'1'=$Kb_FrCa; '2'=$Kb_CanMultilingual}
+        ExpectedPreloadOrder    = @{'1'=$Kb_CanMultilingual; '2'=$Kb_FrCa}
     }
 
     try {
@@ -126,8 +126,8 @@ function Test-FrCaKeyboardCompliance {
 
         $hasOnlyTwo = ($preload.Keys.Count -eq 2) -and ($preload.ContainsKey('1')) -and ($preload.ContainsKey('2'))
         $orderOk    = $hasOnlyTwo -and
-                      ($preload['1'].ToUpperInvariant() -eq $Kb_FrCa.ToUpperInvariant()) -and
-                      ($preload['2'].ToUpperInvariant() -eq $Kb_CanMultilingual.ToUpperInvariant())
+                      ($preload['1'].ToUpperInvariant() -eq $Kb_CanMultilingual.ToUpperInvariant()) -and
+                      ($preload['2'].ToUpperInvariant() -eq $Kb_FrCa.ToUpperInvariant())
 
         if ($hasOnlyTwo -and $orderOk) { $result.PreloadOk = $true }
 
