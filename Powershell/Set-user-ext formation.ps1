@@ -24,7 +24,7 @@
 # if ($sessionbool) {$session = "Desktop"}
 #     else {$session = "App"}
 
-$users = Get-ADUser -filter * | Where-Object {$_.surname -ne $null -AND $_.surname -ne ''}
+$users = Get-ADUser -filter * | Where-Object {$_.surname -ne $null -AND $_.surname -ne '' -AND $_.Enabled -eq 'true'}
 
 $users | ForEach-Object {Get-AdUser -Identity $_ | Set-ADuser -Replace @{extensionAttribute5 = "true" }}
     
