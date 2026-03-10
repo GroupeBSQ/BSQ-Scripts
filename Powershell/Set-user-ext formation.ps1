@@ -24,7 +24,39 @@
 # if ($sessionbool) {$session = "Desktop"}
 #     else {$session = "App"}
 
-$users = Get-ADUser -filter * | Where-Object {$_.surname -ne $null -AND $_.surname -ne '' -AND $_.Enabled -eq 'true'}
+# $users = Get-ADUser -filter * | Where-Object {$_.surname -ne $null -AND $_.surname -ne '' -AND $_.Enabled -eq 'true'}
 
-$users | ForEach-Object {Get-AdUser -Identity $_ | Set-ADuser -Replace @{extensionAttribute5 = "true" }}
-    
+# $users | ForEach-Object {Get-AdUser -Identity $_ | Set-ADuser -Replace @{extensionAttribute5 = "true" }}
+
+$users = Get-ADUser -Filter * -Properties Enabled, Surname, extensionAttribute5
+
+foreach ($user in $users) {
+    $shouldHaveAttribute = $user.Enabled -and -not [string]::IsNullOrWhiteSpace($user.Surname)
+
+    if ($shouldHaveAttribute) {
+        if ($user.extensionAttribute5 -ne "true") {
+            Set-ADUser -Identity $user -Replace @{extensionAttribute5 = "true"}
+            Write-Host "Set extensionAttribute5 for $($user.SamAccountName)"
+        }
+    }
+    else {
+        if (-not [string]::IsNullOrEmpty($user.extensionAttribute5)) {
+            Set-ADUser -Identity $user -Clear extensionAttribute5
+            Write-Host "Cleared extensionAttribute5 for $($user.SamAccountName)"
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
