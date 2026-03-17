@@ -1,6 +1,6 @@
 Add-Type -AssemblyName System.Windows.Forms
 
-$ServiceName = "ViridemConnectService"
+$ServiceName = "Spooler"
 
 function Show-Message {
     param(
@@ -17,6 +17,51 @@ function Show-Message {
     ) | Out-Null
 }
 
+function Test-IsAdministrator {
+    $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = [Security.Principal.WindowsPrincipal]::new($currentIdentity)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Get-PwshPath {
+    $cmd = Get-Command pwsh -ErrorAction SilentlyContinue
+    if ($cmd) {
+        return $cmd.Source
+    }
+
+    $defaultPath = "C:\Program Files\PowerShell\7\pwsh.exe"
+    if (Test-Path $defaultPath) {
+        return $defaultPath
+    }
+
+    throw "Impossible de localiser pwsh.exe"
+}
+
+if (-not (Test-IsAdministrator)) {
+    try {
+        $pwshPath   = Get-PwshPath
+        $scriptPath = $PSCommandPath
+
+        if (-not $scriptPath) {
+            throw "Impossible de déterminer le chemin du script en cours."
+        }
+
+        $arguments = @(
+            "-NoProfile"
+            "-ExecutionPolicy", "Bypass"
+            "-WindowStyle", "Hidden"
+            "-File", "`"$scriptPath`""
+        ) -join ' '
+
+        Start-Process -FilePath $pwshPath -ArgumentList $arguments -Verb RunAs
+        exit 0
+    }
+    catch {
+        Show-Message "L'élévation a été refusée ou a échoué.`n`nDétail : $($_.Exception.Message)" "Élévation requise" ([System.Windows.Forms.MessageBoxIcon]::Warning)
+        exit 10
+    }
+}
+
 try {
     $service = Get-Service -Name $ServiceName -ErrorAction Stop
 }
@@ -31,15 +76,13 @@ switch ($service.Status) {
         $targetStatus = 'Stopped'
         $confirmMessage = "Le service '$($service.DisplayName)' est actuellement démarré.`n`nVoulez-vous l'arrêter ?"
     }
-
     'Stopped' {
         $action = "démarrer"
         $targetStatus = 'Running'
         $confirmMessage = "Le service '$($service.DisplayName)' est actuellement arrêté.`n`nVoulez-vous le démarrer ?"
     }
-
     default {
-        Show-Message "Le service '$($service.DisplayName)' est dans un état non géré : $($service.Status)." "Etat non géré" ([System.Windows.Forms.MessageBoxIcon]::Warning)
+        Show-Message "Le service '$($service.DisplayName)' est dans un état non géré : $($service.Status)." "État non géré" ([System.Windows.Forms.MessageBoxIcon]::Warning)
         exit 2
     }
 }
@@ -85,15 +128,15 @@ try {
     }
 }
 catch {
-    Show-Message "Echec lors de la tentative de $action du service '$($service.DisplayName)'.`n`nDétail : $($_.Exception.Message)" "Erreur" ([System.Windows.Forms.MessageBoxIcon]::Error)
+    Show-Message "Échec lors de la tentative de $action du service '$($service.DisplayName)'.`n`nDétail : $($_.Exception.Message)" "Erreur" ([System.Windows.Forms.MessageBoxIcon]::Error)
     exit 4
 }
 
 # SIG # Begin signature block
 # MIIKIAYJKoZIhvcNAQcCoIIKETCCCg0CAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCiJcMar3iJ4SmS
-# d+Ph9Pcb9ICI+sLT91TSN6tnMqPiIaCCBjAwggYsMIIEFKADAgECAhRQQGmZSiWu
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCB9WDDQcP3T2woS
+# HsYlQE6YFm+tCwLOgO0sxl3bGDFVGaCCBjAwggYsMIIEFKADAgECAhRQQGmZSiWu
 # R1hlnUKfCD4py4JQhzANBgkqhkiG9w0BAQsFADB7MS0wKwYDVQQKEyRVc2luZSBE
 # ZSBDb25nZWxhdGlvbiBEZSBTdC1icnVubyBJbmMxLTArBgNVBAsTJDY4YTU2NzBm
 # LWRjNzQtNDc0Ni05MWQ3LTNjMWY3MDhkZTBkNzEbMBkGA1UEAxMSU0NFUG1hbi1S
@@ -132,17 +175,17 @@ catch {
 # AxMSU0NFUG1hbi1Sb290LUNBLVYxAhRQQGmZSiWuR1hlnUKfCD4py4JQhzANBglg
 # hkgBZQMEAgEFAKCBhDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3
 # DQEJAzEMBgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEV
-# MC8GCSqGSIb3DQEJBDEiBCDDy8zof027VZTDPVUmgRzH+L7YoFx4/YntwBUMjwrG
-# dzANBgkqhkiG9w0BAQEFAASCAgAicvFJiqbdYn+MhU1w9kfw7opS81Ccth1kF8T9
-# KA5hGy6SkAMvTFOS5WAfiNo9md9F56vaTkaMzImrsCynM2M4RYUxr8ubPHT9qkmc
-# HY2OayNEOsYpsafmtts13Hoz0VV6mYZMLX6UeHJi89Nh3eFscalzG+yjaXrR6+LA
-# PPYZ5D1gRd2iS5DlFclOZtGufQSyRKIBgyiD+0qaln47ltHOP7ON6PeQXGC3kas2
-# NzJQ0xrG/Ea4mhY+yLNCMeYTsDoo9SNFguu/EWvqt8LQmgTlgqwzKnSPK2y4TxU5
-# DGSfZfPcJkJmCG6AVgExtjW+FfANE3UJvlylfnVVQr2F9ZmVBs7mklD2sF2/7Eoe
-# ucKXyiqErSS4DddogvoET9RWsE1o3QyECTt8CytFYoMYQ99nDAHL5bEg2plmRIek
-# 5cNi1fTCQXB3WgC5QM4EJoeTtZcENt7zXoZdnMY7FCjJVBFljunDWnWFS/TrlbYP
-# hgtJ81pMWDtKi9fpjKsWCx33VULTqLTtbySts1GFbpTZIx+2gOVJyLBVyrpWjQ+9
-# gkR2CPqhdYfrnYhSWIEvDoimnI74V85t1aQmr9axFwRZttjJRjEtRSJ23ofcHKkA
-# 8Hb3aTqJ2F2sDAC6iH0ydLqCGz1sQ9DEYkLVhTn+15iftp3HHEYC2/H1LrC0NXql
-# MvustQ==
+# MC8GCSqGSIb3DQEJBDEiBCC5nLZykl/OYjtM8klaq5LzAVnYasQJTBl7WU03AkTz
+# kzANBgkqhkiG9w0BAQEFAASCAgBE06dFSlb0QiKnajCPh3Wb1HeCIAhEnK972IUC
+# Yoeewzts8Ro66aiAEEK451E6WkRqwRSi/ESZh2juymdwtyMtjEacJAIjnJXicjpd
+# ZEfYU40nqjnt8bs0RPN3/7QkIFiPzEW1OKRB6Zi1OUUT1UUKiWQAvTqVLns4CXJQ
+# 5WyH+ubfuShEwOhZHF5/zwgyxOari8GLKTK3aSPnImECwRZAGaEtuGxmGeZXMDTT
+# RzyHy8jOfyU6LDFZrf/oolH+nFp4mNDnh18Rwcc+xmx+vUa7WmOLK7jgDOQFWquh
+# OT/Fmfdq1UhjYcKyBBkzKmvYGUncjq0jf+GTUmbVmRkVQW4Kb8BJt0TtLfekUl8u
+# 1ovqK8yx/ZClfuwXJE0rW4Ak9QcD2xyeik9B3qFeBub14Goyxxqcn9rpum//PmH3
+# QaKdYcCUCTxjzrrmLRLTW5uLvd3pxzEujb2LH+XegQ3NZB5lKXVtFFOpYC7r5MuI
+# 1/rLRKnAog1SRYhmoFJHbsVswYfpOMVb/0vXkED31qTctOIj5eKnz7KkGFc4Vp2w
+# 0gwirPzuoMM0mR55QUB7iZANBLKM2mPI2K6/cHaTjtY8BXIU88VmPo66rU8kUZhH
+# zWaR6E+X+2OHnV3YUwnWTNlV26jy2ghqYyCgUrjd7lC9uZbeiZGf4kbnN+QevCOa
+# DGEVVA==
 # SIG # End signature block
