@@ -1,66 +1,26 @@
-#fonction pour convertir les inputs en boolean
-Function ConvertTo-Boolean {
-    param($Variable)
-    If ($Variable -eq "Y" -or $Variable -eq "o"-or $Variable -eq "yes"-or $Variable -eq "oui") {
-        $True
+# ============================================================
+# hidefromGAL.ps1 - Mode automatique
+# Cache les boites courriel de la GAL pour les comptes:
+#   - desactives (Enabled -eq $false)
+#   - OU dont le Surname est vide
+# Decache les comptes actifs avec un Surname valide
+# ============================================================
+
+$users = Get-ADUser -Filter * -Properties Enabled, Surname, msExchHideFromAddressLists
+
+foreach ($user in $users) {
+    $shouldHide = (-not $user.Enabled) -or [string]::IsNullOrWhiteSpace($user.Surname)
+
+    if ($shouldHide) {
+        if ($user.msExchHideFromAddressLists -ne $true) {
+            Set-ADUser -Identity $user -Add @{msExchHideFromAddressLists = $true}
+            Write-Host "Cache de la GAL: $($user.SamAccountName)"
+        }
     }
-    If ($Variable -eq "N" -or $Variable -eq "no" -or $Variable -eq "non") {
-        $False
+    else {
+        if ($user.msExchHideFromAddressLists -eq $true) {
+            Set-ADUser -Identity $user -Clear msExchHideFromAddressLists
+            Write-Host "Decache de la GAL: $($user.SamAccountName)"
+        }
     }
-}
-# question pour savoir quel utilisateur nous devons verifier
-
-while($user_name= read-host -Prompt "entré le nom d'usager") {
-
-    
-    if ($user_name -eq "" -or $user_name -eq $null){break}
-
-#parametre pour sortir un peut d'information du get-aduser
-$params = @{
-    "identity" = $user_name
-    
-    "Properties" = "samAccountName",
-    "CN",
-    "LastLogonDate",
-    "msExchHideFromAddressLists",
-    "msExchWhenMailboxCreated",
-    "whenChanged",
-    "whenCreated"
-    
-    }
-
-
-
-get-aduser @params
-
-# question  pour savoir si nous effectuons le changmenet du paramtre "msExchHideFromAddressLists"
-
-$add =  read-host -Prompt "est-ce que nous cachons l'adresse de la liste global? (Y/N)"
-
-$add = ConvertTo-Boolean -Variable $add
-
-if (-not $add) {
-$remove =  read-host -prompt "est-ce que nous voulons décaché cette utilisateur de la liste global exchange? (Y/N)"
-$remove= ConvertTo-Boolean -Variable $remove
-}
-
-
-
-
-
-
-#converti l'input en boolean
-#$change = ConvertTo-Boolean -Variable $change
-
-#si nous avons dit oui fait le changmeent du paramtre dans le profil utilisateur
-if ($add) {
-    set-aduser -Identity $user_name -add @{msExchHideFromAddressLists = $true}
-    get-aduser @params
-} elseif ($remove) {
-    set-aduser -Identity $user_name -clear "msExchHideFromAddressLists"
-    get-aduser @params
-}
-    ## "SearchBase"="ou=bleuet,dc=contoso,dc=com"
-    ##"SearchScope" = "Subtree"
-    ##"filter" = {enabled -eq $true}
 }
