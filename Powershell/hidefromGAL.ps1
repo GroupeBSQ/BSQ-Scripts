@@ -18,7 +18,11 @@ $exclusions = @(
     "laboratoirenp",
     "laboratoiresf",
     "maintenanceetmmf",
-    "support"
+    "support",
+    "sbconferencRH",
+    "sbconferencegrande",
+    "conferencegrande",
+    "conferencerh"
 )
 
 $users = Get-ADUser -Filter * -Properties Enabled, Surname, msExchHideFromAddressLists
